@@ -3,14 +3,31 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href='./style.css'>
+
+<!-- jQuery and JS bundle w/ Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     <title>Hasti Sharifi - HW3</title>
 </head>
 
 <body>
-    <textarea id="input" style="height: 300px; width: 400px;"></textarea>
-    <br />
-    <button id="undo" style="height: 50px; width: 200px;">undo</button>
-    <button id="redo" style="height: 50px; width: 200px;">redo</button>
+    <!-- <p id='change'>Here</p> -->
+    <div class="wrapper">
+        <textarea id="input" style="height: 300px; width: 400px;"></textarea>
+        
+    </div>
+    <div class="wrapper">
+        <button id="undo" style="height: 50px; width: 200px;" type="button" class="btn btn-secondary">undo</button>
+        <button id="redo" style="height: 50px; width: 200px;" type="button" class="btn btn-primary">redo</button>
+
+        <p>Shake your phone to left and right to undo</p>
+        <p>Shake your phone forwars and backwards to redo</p>
+    </div>
+    
+
+    
     <script src="./src/UndoRedo.js"></script>
 </body>
 
@@ -51,15 +68,35 @@
         }
     });
 
-    window.addEventListener('deviceorientation', handleOrientationEvent, false);
-
+    
      handleOrientationEvent = function(e) {
-        var alpha = e.alpha,
-            beta = e.beta,
-            gamma = e.gamma;
+        var x = event.acceleration.x;
+        var y = event.acceleration.y;
+        var z = event.acceleration.z;
+        // document.getElementById("change").innerHTML = rot;
 
-            alert(alpha);
+        if((x > 10 || y > 10 || x < -10 || y < -10) && z < 8 && z > -8){
+            //document.getElementById("change").innerHTML = "undo";
+            if (txtHistory.undo(true) !== undefined) {
+            textarea.value = txtHistory.undo();
+            }
+        }
+        else if(z < -9 || z > 9){
+            //document.getElementById("change").innerHTML = "redo";
+            if (txtHistory.redo(true) !== undefined) {
+            textarea.value = txtHistory.redo();
+            }
+        }
+            // document.getElementById("change").innerHTML = "redo";
+        // if (rot-180 > 0){
+        //     window.alert("right");
+        // }else{
+        //     window.alert("left");
+        // }
      }
+
+     window.addEventListener('devicemotion', handleOrientationEvent, false);
+
 </script>
 
 </html>
